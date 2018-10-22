@@ -63,34 +63,57 @@ def logout_view(request):
 
 
 def signup_view(request):
-    # URL: /members/signup/
-    # Template: members/signup.html
-    # Form:
-    #  SignupForm
-    #    username, password1, password2를 받음
-    # 나머지 요소들은 login.html의 요소를 최대한 재활용
+    # render하는 경우
+    #  1. POST요청이며 사용자명이 이미 존재할 경우
+    #  2. POST요청이며 비밀번호가 같지 않은 경우
+    #  3. GET요청인 경우
+    # redirect하는 경우
+    #  1. POST요청이며 사용자명이 존재하지 않고 비밀번호가 같은 경우
 
-    # GET요청시 해당 템플릿 보여주도록 처리
-    #  base.html에 있는 'Signup'버튼이 이 쪽으로
-    #  이동할 수 있도록 url 링크걸기
+    """
+    if request.method가 POST면:
+        if 사용자명이 존재하면:
+            render1
+        if 비밀번호가 같지 않으면:
+            render2
+        (else, POST면서 사용자명도없고 비밀번호도 같으면):
+            redirect
+    (else, GET요청이면):
+        render
+
+    if request.method가 POST면:
+        if 사용자명이 존재하면:
+        if 비밀번호가 같지 않으면:
+        (else, POST면서 사용자명도없고 비밀번호도 같으면):
+            return redirect
+
+    (POST면서 사용자명이 존재하면)
+    (POST면서 비밀번호가 같지않으면)
+    (POST면서 사용자명이 없고 비밀번호도 같은 경우가 "아니면" -> GET요청도 포함)
+    return render
+
+    :param request:
+    :return:
+    """
     if request.method == 'POST':
-        # 1. request.POST에 전달된 username, password1, password2를
-        #    각각 해당 이름의 변수에 할당
-        # 2-x에서는 HttpResponse에 문자열로 에러를 리턴해주기
-        #  2-1. username에 해당하는 User가 이미 있다면
-        #       사용자명 ({username})은 이미 사용중입니다.
-        #  2-2. password1과 password2가 일치하지 않는다면
-        #       비밀번호와 비밀번호 확인란의 값이 일치하지 않습니다.
-        # 3. 위의 두 경우가 아니라면
-        #    새 User를 생성, 해당 User로 로그인 시켜준 후 'posts:post-list'로 redirect처리
         username = request.POST['username']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
 
         if User.objects.filter(username=username).exists():
-            return HttpResponse(f'사용자명({username})은 이미 사용중입니다.')
+            form = SignupForm()
+            context = {
+                'form': form,
+                'error': f'사용자명({username})은 이미 사용중입니다.',
+            }
+            return render(request, 'members/signup.html', context)
         if password1 != password2:
-            return HttpResponse('비밀번호와 비밀번호 확인란의 값이 일치하지 않습니다')
+            form = SignupForm()
+            context = {
+                'form': form,
+                'error': '비밀번호와 비밀번호 확인란의 값이 일치하지 않습니다',
+            }
+            return render(request, 'members/signup.html', context)
 
         # create_user메서드는 create와 달리 자동으로 password해싱을 해줌
         user = User.objects.create_user(
