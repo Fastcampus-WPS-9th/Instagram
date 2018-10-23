@@ -1,6 +1,4 @@
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 
 from .forms import LoginForm, SignupForm
@@ -19,6 +17,8 @@ def login_view(request):
     #  LoginForm
     #   username, password를 받을 수 있도록 함
     #    password는 widget에 PasswordInput을 사용하기
+
+    context = {}
     if request.method == 'POST':
         # 1. request.POST에 데이터가 옴
         # 2. 온 데이터 중에서 username에 해당하는 값과 password에 해당하는 값을 각각
@@ -29,22 +29,20 @@ def login_view(request):
         #      세션/쿠키 기반의 로그인과정을 수행, 완료 후 posts:post-list페이지로 redirect
         # 4-2. 인증에 실패한다면
         #      이 페이지에서 인증에 실패했음을 사용자에게 알려줌
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            # 인증 성공시
-            login(request, user)
+
+        # username, password를 받는 부분을
+        # LoginForm을 사용하도록 수정
+        #  로그인에 실패했을 경우, Template에 form.non_field_errors를 사용해서
+        #  로그인에 실패했다는것을 출력
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            login(request, form.user)
             return redirect('posts:post-list')
-        else:
-            # 인증 실패시
-            pass
     else:
         form = LoginForm()
-        context = {
-            'form': form,
-        }
-        return render(request, 'members/login.html', context)
+
+    context['form'] = form
+    return render(request, 'members/login.html', context)
 
 
 def logout_view(request):
