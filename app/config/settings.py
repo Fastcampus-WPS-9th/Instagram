@@ -47,8 +47,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
+# Auth
+AUTH_USER_MODEL = 'members.User'
 
 INSTALLED_APPS = [
     # AppConfig클래스를 사용
