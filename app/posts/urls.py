@@ -17,4 +17,7 @@ urlpatterns = [
     path('<int:post_pk>/comments/create/',
          views.comment_create,
          name='comment-create'),
+    path('tag-search/',
+         views.tag_search,
+         name='tag-search'),
 ]
