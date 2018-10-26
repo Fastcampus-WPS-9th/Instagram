@@ -70,6 +70,11 @@ class Comment(models.Model):
         #  아래와 같이 변경
         #   <a href="/explore/tags/{태그명}>/">#{태그명}</a>
         # re.sub를 사용
+        return re.sub(
+            self.TAG_PATTERN,
+            r'<a href="/explore/tags/\g<tag>/">#\g<tag></a>',
+            self.content,
+        )
         
         # 템플릿에서는 comment.content대신 comment.html을 출력
 
