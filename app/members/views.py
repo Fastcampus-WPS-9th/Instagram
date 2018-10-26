@@ -1,7 +1,8 @@
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from .forms import LoginForm, SignupForm
+from .forms import LoginForm, SignupForm, UserProfileForm
 
 
 def login_view(request):
@@ -120,3 +121,12 @@ def signup_view(request):
     #   포함된 Form을 전달해서 동적으로 form을 렌더링
     context['form'] = form
     return render(request, 'members/signup.html', context)
+
+
+@login_required
+def profile(request):
+    form = UserProfileForm(instance=request.user)
+    context = {
+        'form': form,
+    }
+    return render(request, 'members/profile.html', context)
