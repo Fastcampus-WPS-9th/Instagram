@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.contrib import messages
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
@@ -77,6 +79,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
+# 템플릿에서 message.tags에 사용될 값 커스터마이징
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
