@@ -1,6 +1,10 @@
+import json
+
+import requests
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from .forms import LoginForm, SignupForm, UserProfileForm
@@ -152,3 +156,26 @@ def profile(request):
         'form': form,
     }
     return render(request, 'members/profile.html', context)
+
+
+def facebook_login(request):
+    api_get_access_token = 'https://graph.facebook.com/v3.2/oauth/access_token'
+    # 페이스북으로부터 받아온 request token
+    code = request.GET.get('code')
+
+    # request token을 access token으로 교환
+    params = {
+        'client_id': 1921889824591097,
+        'redirect_uri': 'http://localhost:8000/members/facebook-login/',
+        'client_secret': '0cd91f0030cc44d0815b4a4ed8e5526a',
+        'code': code,
+    }
+    response = requests.get(api_get_access_token, params)
+    # 인수로 전달한 문자열이 'JSON'형식일 것으로 생각
+    # json.loads는 전달한 문자열이 JSON형식일 경우, 해당 문자열을 parsing해서 파이썬 Object를 리턴함
+    # response_object = json.loads(response.text)
+    data = response.json()
+    access_token = data['access_token']
+
+    # access_token을 사용해서 사용자 정보를 가져오기
+    pass
