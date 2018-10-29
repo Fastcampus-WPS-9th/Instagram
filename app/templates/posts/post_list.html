@@ -22,15 +22,20 @@
 			<div class="card-body">
 				<img src="{{ post.photo.url }}" class="card-img-top">
 
-				<form action="post_like_toggle에서 처리">
-					<!--
-          버튼의 텍스트에
-          현재 user가 이 Post에 좋아요를 누른상태라면 '좋아요해제' 출력
-          버튼 클릭시 post_like_toggle에서 해당 로직 처리
-					-->
+				{% if user.is_authenticated %}
+				<form action="{% url 'posts:post-like-toggle' post_pk=post.pk %}"
+							method="POST">
+					{% csrf_token %}
 					<button class="btn btn-primary"
-					        type="submit">좋아요/좋아요해제</button>
+					        type="submit">
+						{% if user in post.like_users.all %}
+							좋아요 해제
+						{% else %}
+							좋아요
+						{% endif %}
+					</button>
 				</form>
+				{% endif %}
 
 				<div>
 					<span>좋아하는 사람 </span>

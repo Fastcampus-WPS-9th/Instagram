@@ -20,4 +20,7 @@ urlpatterns = [
     path('tag-search/',
          views.tag_search,
          name='tag-search'),
+    path('<int:post_pk>/like-toggle/',
+         views.post_like_toggle,
+         name='post-like-toggle'),
 ]

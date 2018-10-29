@@ -1,7 +1,7 @@
 import re
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import CommentForm, PostForm
 from .models import Post
@@ -140,4 +140,7 @@ def post_like_toggle(request, post_pk):
 
     # request.user가 post_pk에 해당하는 Post에
     #  Like Toggle처리
-    pass
+    if request.method == 'POST':
+        post = get_object_or_404(Post, pk=post_pk)
+        post.like_toggle(request.user)
+        return redirect('posts:post-list')
