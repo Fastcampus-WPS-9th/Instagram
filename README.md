@@ -26,8 +26,6 @@ pip install -r requirements.txt
 }
 ```
 
-
-
 ## 모델
 
 - 포스트 (Post)
