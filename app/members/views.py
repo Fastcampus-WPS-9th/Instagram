@@ -1,6 +1,7 @@
 import imghdr
 
 import requests
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
@@ -170,9 +171,9 @@ def facebook_login(request):
 
     # request token을 access token으로 교환
     params = {
-        'client_id': 1921889824591097,
+        'client_id': settings.FACEBOOK_APP_ID,
         'redirect_uri': 'http://localhost:8000/members/facebook-login/',
-        'client_secret': '0cd91f0030cc44d0815b4a4ed8e5526a',
+        'client_secret': settings.FACEBOOK_APP_SECRET,
         'code': code,
     }
     response = requests.get(api_get_access_token, params)
