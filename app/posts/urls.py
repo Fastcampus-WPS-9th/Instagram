@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from . import views, apis
 
 # 이 urls모듈의 app_name에 'posts'를 사용
 # reverse또는 템플릿의 {% url %}태그에서 사용
@@ -23,4 +23,8 @@ urlpatterns = [
     path('<int:post_pk>/like-toggle/',
          views.post_like_toggle,
          name='post-like-toggle'),
+
+    path('api/tag-search/',
+         apis.tag_search,
+         name='api-tag-search'),
 ]
