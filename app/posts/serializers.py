@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Post
+from .models import Post, PostLike
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -17,4 +17,20 @@ class PostSerializer(serializers.ModelSerializer):
         )
         read_only_fields = (
             'author',
+        )
+
+
+class PostLikeSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+    )
+
+    class Meta:
+        model = PostLike
+        fields = (
+            'post',
+            'user',
+        )
+        read_only_fields = (
+            'user',
         )
