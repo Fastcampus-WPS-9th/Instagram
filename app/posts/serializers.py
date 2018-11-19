@@ -4,9 +4,8 @@ from .models import Post, PostLike
 
 
 class PostSerializer(serializers.ModelSerializer):
-    # 작성자
-    # 댓글목록
-    # 좋아요 누른 사람 목록
+    is_like = serializers.SerializerMethodField()
+
     class Meta:
         model = Post
         fields = (
@@ -14,10 +13,20 @@ class PostSerializer(serializers.ModelSerializer):
             'author',
             'photo',
             'created_at',
+            'is_like',
         )
         read_only_fields = (
             'author',
         )
+
+    def get_is_like(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            try:
+                postlike = obj.postlike_set.get(user=user)
+                return PostLikeSerializer(postlike).data
+            except PostLike.DoesNotExist:
+                return
 
 
 class PostLikeSerializer(serializers.ModelSerializer):
@@ -28,10 +37,11 @@ class PostLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostLike
         fields = (
+            'pk',
             'post',
             'user',
+            'created_at',
         )
         read_only_fields = (
             'user',
         )
-
