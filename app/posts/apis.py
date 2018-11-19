@@ -2,7 +2,6 @@ import json
 
 from django.http import HttpResponse
 from rest_framework import permissions, generics, status
-from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated, APIException
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -33,7 +32,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     )
 
 
-class PostLikeCreate(APIView):
+class PostLikeCreateDestroy(APIView):
     permission_classes = (
         permissions.IsAuthenticated,
     )
@@ -48,8 +47,19 @@ class PostLikeCreate(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, post_pk):
+        post = get_object_or_404(Post, pk=post_pk)
+        post_like = get_object_or_404(
+            PostLike, post=post, user=request.user)
+        post_like.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-class PostLikeDelete:
+
+class PostLikeCreateAPIView(generics.CreateAPIView):
+    pass
+
+
+class PostLikeDestroyAPIView(generics.DestroyAPIView):
     pass
 
 

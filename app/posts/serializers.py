@@ -34,3 +34,4 @@ class PostLikeSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'user',
         )
+
