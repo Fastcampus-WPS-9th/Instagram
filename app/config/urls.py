@@ -21,7 +21,12 @@ from django.views.generic import RedirectView
 
 from . import views
 from posts.views import tag_post_list
+from posts import apis
 
+urlpatterns_api = [
+    path('posts/', apis.PostList.as_view()),
+    path('posts/<int:pk>/', apis.PostDetail.as_view()),
+]
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', views.index, name='index'),
@@ -32,6 +37,8 @@ urlpatterns = [
          tag_post_list,
          name='tag-post-list'),
     path('members/', include('members.urls')),
+
+    path('api/', include(urlpatterns_api)),
 ]
 # MEDIA_URL로 시작하는 URL은 static()내의 serve() 함수를 통해 처리
 # MEDIA_ROOT기준으로 파일을 검색함
