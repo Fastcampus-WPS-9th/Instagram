@@ -23,10 +23,12 @@ from . import views
 from posts.views import tag_post_list
 from posts import apis
 
-urlpatterns_api = [
-    path('posts/', apis.PostList.as_view()),
-    path('posts/<int:pk>/', apis.PostDetail.as_view()),
-]
+urlpatterns_api = ([
+    path('posts/', apis.PostList.as_view(), name='post-list'),
+    path('posts/<int:pk>/', apis.PostDetail.as_view(), name='post-detail'),
+    path('posts/<int:post_pk>/like/', apis.PostLikeCreate.as_view(), name='post-like'),
+], 'api')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', views.index, name='index'),
