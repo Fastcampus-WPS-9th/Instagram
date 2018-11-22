@@ -81,6 +81,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # django-cors-headers 라이브러리를 사용해보기
+    'config.middleware.CORSMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
