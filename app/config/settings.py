@@ -63,6 +63,11 @@ ALLOWED_HOSTS = []
 # Auth
 AUTH_USER_MODEL = 'members.User'
 
+# django-debug-toolbar
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 INSTALLED_APPS = [
     # AppConfig클래스를 사용
     'members.apps.MembersConfig',
@@ -75,6 +80,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'debug_toolbar',
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
@@ -83,6 +89,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     # django-cors-headers 라이브러리를 사용해보기
     'config.middleware.CORSMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -158,3 +165,29 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+
+LOGGING = {
+    'version': 1,
+    'formatters': {
+        'default': {
+            'format': '[%(levelname)s] %(name)s (%(asctime)s)\n\t%(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+        },
+    },
+    'loggers': {
+        'django.db': {
+            'handlers': [
+                'console',
+            ],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
+}

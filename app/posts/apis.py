@@ -13,7 +13,9 @@ from .permissions import IsUser
 
 # generics.ListCreateAPIView
 class PostList(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects\
+        .select_related('author')\
+        .prefetch_related('comments', 'comments__author')
     serializer_class = PostSerializer
 
     permission_classes = (
