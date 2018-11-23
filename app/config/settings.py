@@ -68,6 +68,12 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
+# django-cors-headers
+CORS_ORIGIN_WHITELIST = (
+    '127.0.0.1',
+    'localhost:3000',
+)
+
 INSTALLED_APPS = [
     # AppConfig클래스를 사용
     'members.apps.MembersConfig',
@@ -82,13 +88,15 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'django_extensions',
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
     # django-cors-headers 라이브러리를 사용해보기
-    'config.middleware.CORSMiddleware',
+    # 'config.middleware.CORSMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

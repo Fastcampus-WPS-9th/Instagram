@@ -35,6 +35,7 @@ urlpatterns_api_posts = ([
 
 urlpatterns_api_members = ([
     path('auth-token/', members_apis.AuthTokenView.as_view()),
+    path('auth-token/facebook/', members_apis.FacebookAuthTokenView.as_view()),
     path('user/profile/', members_apis.UserDetail.as_view()),
     path('user/<int:pk>/', members_apis.UserDetail.as_view()),
     path('user/view/profile/', members_apis.UserDetailAPIView.as_view()),
