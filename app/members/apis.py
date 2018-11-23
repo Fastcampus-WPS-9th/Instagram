@@ -6,7 +6,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from members.backends import FacebookBackend
+from members.backends import get_user_by_access_token
 from .serializers import AuthTokenSerializer, UserSerializer
 
 User = get_user_model()
@@ -47,7 +47,7 @@ class FacebookAuthTokenView(APIView):
         if User.objects.filter(username=facebook_user_id).exists():
             user = User.objects.get(username=facebook_user_id)
         else:
-            user = FacebookBackend.get_user_by_access_token(access_token)
+            user = get_user_by_access_token(access_token)
         token = Token.objects.get_or_create(user=user)[0]
         data = {
             'token': token.key,
