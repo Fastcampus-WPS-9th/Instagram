@@ -42,6 +42,11 @@ class FacebookAuthTokenView(APIView):
         #     return Response(serializer.data)
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        # 1. 아래 코드들을 Serializer로 처리
+        # 2. Serializer내부로 들어갈 아래 코드의 내용을 ClientFacebookBackend의 authenticate를 이용해서 처리
+        # 3. status가 'connected'가 아닌 경우, 사용자가 추가로 페이스북 로그인 및 앱 권한 승인 후 아래 로직을 진행할 수 있도록
+        #    클라이언트 코드 수정해보기
+        #    FB.login() <- 이 메서드 활용할 것
         facebook_user_id = request.data.get('user_id')
         access_token = request.data.get('access_token')
         if User.objects.filter(username=facebook_user_id).exists():
